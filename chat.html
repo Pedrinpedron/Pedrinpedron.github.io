@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Chat Simple</title>
+<style>
+body { font-family: Arial; }
+#chat { height: 300px; overflow-y: auto; border: 1px solid #000; margin-bottom: 5px; padding: 5px; }
+</style>
+</head>
+<body>
+
+<div id="chat"></div>
+
+<input type="text" id="msg" placeholder="Escribe...">
+<button onclick="enviar()">Enviar</button>
+<button onclick="borrar()">Borrar todo</button>
+
+<script>
+const PASSWORD = "1234";
+
+window.onload = () => {
+  const datos = JSON.parse(localStorage.getItem("chat")) || [];
+  datos.forEach(t => agregar(t));
+};
+
+function agregar(texto) {
+  const div = document.createElement("div");
+  div.textContent = texto;
+  document.getElementById("chat").appendChild(div);
+}
+
+function enviar() {
+  const input = document.getElementById("msg");
+  const texto = input.value;
+  if (!texto) return;
+
+  agregar(texto);
+
+  const datos = JSON.parse(localStorage.getItem("chat")) || [];
+  datos.push(texto);
+  localStorage.setItem("chat", JSON.stringify(datos));
+
+  input.value = "";
+}
+
+function borrar() {
+  const pass = prompt("Contraseña:");
+  if (pass === PASSWORD) {
+    localStorage.removeItem("chat");
+    document.getElementById("chat").innerHTML = "";
+  } else {
+    alert("Incorrecta");
+  }
+}
+</script>
+
+</body>
+</html>
